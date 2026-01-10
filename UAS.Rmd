@@ -654,7 +654,7 @@ html, body {
       nim: "52250068",
       role: "Quality Control",
       description: "Ensuring top-notch quality and precision in every aspect of our projects with meticulous attention to detail.",
-      image: "img/FotoChandra.png"
+      image: "https://raw.githubusercontent.com/YanDraa/UAS/ced83fdac0d2eb8756bffa0d1a65d307c3877f94/img/FotoChandra.png"
     },
     {
       id: 1,
@@ -662,7 +662,7 @@ html, body {
       nim: "52250059",
       role: "UI / UX Designer",
       description: "Crafting intuitive and beautiful user experiences that bridge the gap between design and functionality.",
-      image: "img/FotoAndra.png"
+      image: "https://raw.githubusercontent.com/YanDraa/UAS/ced83fdac0d2eb8756bffa0d1a65d307c3877f94/img/FotoAndra.png"
     },
     {
       id: 2,
@@ -670,7 +670,7 @@ html, body {
       nim: "52250052",
       role: "Data Analyst",
       description: "Transforming complex data into actionable insights through advanced analytics and visualization techniques.",
-      image: "img/FotoRefan.png"
+      image: "https://raw.githubusercontent.com/YanDraa/UAS/ced83fdac0d2eb8756bffa0d1a65d307c3877f94/img/FotoRefan.png"
     },
     {
       id: 3,
@@ -678,7 +678,7 @@ html, body {
       nim: "52250053",
       role: "Project Leader",
       description: "Leading projects with strategic vision and ensuring seamless execution from conception to completion.",
-      image: "img/FotoCahaya.png"
+      image: "https://raw.githubusercontent.com/YanDraa/UAS/ced83fdac0d2eb8756bffa0d1a65d307c3877f94/img/FotoCahaya.png"
     },
     {
       id: 4,
@@ -686,7 +686,7 @@ html, body {
       nim: "52250044",
       role: "Documentation",
       description: "Creating comprehensive and clear documentation that enhances understanding and project continuity.",
-      image: "img/FotoCloise.png"
+      image: "https://raw.githubusercontent.com/YanDraa/UAS/ced83fdac0d2eb8756bffa0d1a65d307c3877f94/img/FotoCloise.png"
     },
     {
       id: 5,
@@ -694,7 +694,7 @@ html, body {
       nim: "7788990011",
       role: "Technical Writer",
       description: "Translating complex technical concepts into accessible and user-friendly documentation and guides.",
-      image: "img/FotoMaiza.png"
+      image: "https://raw.githubusercontent.com/YanDraa/UAS/ced83fdac0d2eb8756bffa0d1a65d307c3877f94/img/FotoMaiza.png"
     }
   ];
   
@@ -915,42 +915,42 @@ htmltools::HTML('
       <div class="member-item small member-chandra">
         <span class="role-chandra">Quality Control</span>
         <div class="card">
-          <img src="img/FotoChandra.png" alt="Chandra - Quality Control Specialist" loading="lazy">
+          <img src="https://raw.githubusercontent.com/YanDraa/UAS/ced83fdac0d2eb8756bffa0d1a65d307c3877f94/img/FotoChandra.png" alt="Chandra - Quality Control Specialist" loading="lazy">
         </div>
       </div>
 
       <div class="member-item medium member-andra">
         <span class="role-andra">UI / UX Designer</span>
         <div class="card">
-          <img src="img/FotoAndra.png" alt="Andra - UI/UX Designer" loading="lazy">
+          <img src="https://raw.githubusercontent.com/YanDraa/UAS/ced83fdac0d2eb8756bffa0d1a65d307c3877f94/img/FotoAndra.png" alt="Andra - UI/UX Designer" loading="lazy">
         </div>
       </div>
 
       <div class="member-item large member-refan">
         <span class="role-refan">Data Analyst</span>
         <div class="card">
-          <img src="img/FotoRefan.png" alt="Refan - Data Analyst" loading="lazy">
+          <img src="https://raw.githubusercontent.com/YanDraa/UAS/ced83fdac0d2eb8756bffa0d1a65d307c3877f94/img/FotoRefan.png" alt="Refan - Data Analyst" loading="lazy">
         </div>
       </div>
 
       <div class="member-item large member-cahaya">
         <span class="role-cahaya">Project Leader</span>
         <div class="card">
-          <img src="img/FotoCahaya.png" alt="Cahaya - Project Leader" loading="lazy">
+          <img src="https://raw.githubusercontent.com/YanDraa/UAS/ced83fdac0d2eb8756bffa0d1a65d307c3877f94/img/FotoCahaya.png" alt="Cahaya - Project Leader" loading="lazy">
         </div>
       </div>
 
       <div class="member-item medium member-cloise">
         <span class="role-cloise">Documentation</span>
         <div class="card">
-          <img src="img/FotoCloise.png" alt="Cloise - Documentation Specialist" loading="lazy">
+          <img src="https://raw.githubusercontent.com/YanDraa/UAS/ced83fdac0d2eb8756bffa0d1a65d307c3877f94/img/FotoCloise.png" alt="Cloise - Documentation Specialist" loading="lazy">
         </div>
       </div>
 
       <div class="member-item small member-maiza">
         <span class="role-maiza">Technical Writer</span>
         <div class="card">
-          <img src="img/FotoMaiza.png" alt="Maiza - Technical Writer" loading="lazy">
+          <img src="https://raw.githubusercontent.com/YanDraa/UAS/ced83fdac0d2eb8756bffa0d1a65d307c3877f94/img/FotoMaiza.png" alt="Maiza - Technical Writer" loading="lazy">
         </div>
       </div>
 
