@@ -1,0 +1,2145 @@
+---
+title: "UAS Statatistika Dasar"
+output:
+  flexdashboard::flex_dashboard:
+    vertical_layout: scroll
+    theme: yeti
+---
+
+
+```{r, echo=FALSE, results="asis"}
+htmltools::HTML('<link rel="stylesheet" href="assets/styles.css">')
+```
+
+```{r, echo=FALSE, results="asis"}
+htmltools::HTML('<script src="assets/scripts.js"></script>')
+```
+
+```{r setup, include=FALSE}
+packages <- c(
+  "flexdashboard",
+  "tidyverse",
+  "highcharter",
+  "viridis",
+  "DT",
+  "gapminder",
+  "jsonlite"
+)
+
+installed <- packages %in% rownames(installed.packages())
+if (any(!installed)) {
+  install.packages(packages[!installed])
+}
+
+# Load library
+library(flexdashboard)
+library(tidyverse)
+library(highcharter)
+library(viridis)
+library(DT)
+library(gapminder)
+library(jsonlite)
+```
+
+Members {data-orientation=rows}
+=======================================================================
+
+```{r, echo=FALSE, results="asis"}
+htmltools::HTML('
+<section class="member-section">
+
+  <header class="member-header">
+    <h1>Our Member Group</h1>
+    <p>Discover the impact behind the role.</p>
+  </header>
+
+  <div class="member-grid-wrapper">
+    <div class="member-grid">
+
+      <div class="member-item small member-chandra">
+        <span class="role-chandra">Quality Control</span>
+        <div class="card">
+          <img src="img/FotoChandra.png" alt="Chandra - Quality Control Specialist" loading="lazy">
+        </div>
+      </div>
+
+      <div class="member-item medium member-andra">
+        <span class="role-andra">UI / UX Designer</span>
+        <div class="card">
+          <img src="img/FotoAndra.png" alt="Andra - UI/UX Designer" loading="lazy">
+        </div>
+      </div>
+
+      <div class="member-item large member-refan">
+        <span class="role-refan">Data Analyst</span>
+        <div class="card">
+          <img src="img/FotoRefan.png" alt="Refan - Data Analyst" loading="lazy">
+        </div>
+      </div>
+
+      <div class="member-item large member-cahaya">
+        <span class="role-cahaya">Project Leader</span>
+        <div class="card">
+          <img src="img/FotoCahaya.png" alt="Cahaya - Project Leader" loading="lazy">
+        </div>
+      </div>
+
+      <div class="member-item medium member-cloise">
+        <span class="role-cloise">Documentation</span>
+        <div class="card">
+          <img src="img/FotoCloise.png" alt="Cloise - Documentation Specialist" loading="lazy">
+        </div>
+      </div>
+
+      <div class="member-item small member-maiza">
+        <span class="role-maiza">Technical Writer</span>
+        <div class="card">
+          <img src="img/FotoMaiza.png" alt="Maiza - Technical Writer" loading="lazy">
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</section>
+')
+```
+
+
+Summary of Basic Statistics {data-orientation=rows}
+=======================================================================
+  
+## Column {.tabset .tabset-fade data-height=520}
+-----------------------------------------------------------------------
+
+### Chapter 1 {data-width=1200}
+
+<div style="font-family: Arial; text-align:center; font-size:120%;">
+**Intro to Statistics**
+</div>
+
+<div style="font-family: Arial, sans-serif; line-height: 1.3; text-align: justify;"> 
+<p style="text-align: justify; text-indent: 40px; margin-bottom: 15px;">
+Statistics is a **fundamental foundation for data analysis and evidencebased decision making**.Its main purpose is to convert raw data into reliable information for reasoning and decision-making. Statistics helps simplify data so people can draw conclusions without examining every detail.
+For example, instead of looking at each student’s exam score individually, a teacher can calculate the average score to get an overall view.Mastery of statistics enables better understanding of patterns, prediction of outcomes, and objective conclusions from data. 
+</p>
+</div>
+
+| Aspect | Explanation |
+|---|------------|
+| **Who** | Researchers, data analysts, policymakers, scientists, healthcare professionals, and anyone who needs to make decisions based on data. |
+| **What** | Statistics is the science of collecting, organizing, analyzing, and interpreting data. It includes descriptive and inferential statistics. |
+| **Why** | It reduces uncertainty, supports data-driven decisions, identifies patterns, and enables predictions. |
+| **When** | Used whenever data exists and decisions must be made; developed formally in the 18th–19th centuries. |
+| **Where** | Applied in business, healthcare, social sciences, engineering, and all data-driven fields. |
+| **How** | By defining problems, collecting data, cleaning, exploring, analyzing, and interpreting results. |
+
+
+
+
+
+### Chapter 2 {data-width=1200}
+
+<div style="font-family: Arial; text-align:center; font-size:120%;">
+**Data Exploration**
+</div>
+
+<div style="font-family: Arial, sans-serif; line-height: 1.3; text-align: justify;"> 
+<p style="text-align: justify; text-indent: 40px; margin-bottom: 15px;">
+Data forms the foundation of any analysis, and without a clear understanding of its types and structure, organizing, interpreting, and making accurate decision can be challenging. Classification of data into **numeric** or **quantitativ** and **categorical** or **qualitative**.**Numeric** or **quantitative** data are data that provide information about **how much** or **how many** of something that expressed in numbers that represent counts or measurements. **Categorical** or **Qualitative** data are data expressed in labels, names, or categories rather than numbers. It describe qualities, attributes, or classification.
+</p>
+</div>
+
+<div style="font-family: Arial, sans-serif; line-height: 1.5; text-align: justify;"> 
+<p style="text-align: justify; text-indent: 40px; margin-bottom: 15px;">
+|**Type of Data**|**Sub-Type of Data**|**Explanation**|**Example**|
+|---|---|------|------|
+|**Numeric**|**Discreate**|Consist of countable whole numbers|Number of student, Number of cars|
+| |**Countinuos**|Consist of measurable values that can take on decimals|Height, Weight, Temperature|
+|**Categorical**|**Nominal**|Categories without any natural order or ranking|Gender, Blood type, Car brand|
+| |**Ordinal**|Categories with a meaningful order or ranking, but without fixed differences between ranks|Education level, Satisfaction rating|
+|**Internal Sources**|-|Data that coming from within the organization|Sales transaction, Employee Data|
+|**External Sources**|-|Data obtained from outside the organization|Public datasets, Social media|
+|**Structured**|-|Data that organized by tables or databases and easy to analyze|Sales Data containing transaction date, quantity, price, ID| |
+|**Unstructured**|-|Data in the from of text, images, videos, or log files that require processing|JPEG, PNG, PDF, Blog|
+
+</p>
+</div>
+
+### Chapter 3 {data-width=1200}
+
+<div style="font-family: Arial; text-align:center; font-size:120%;">
+**Basic Visualizations**
+</div>
+
+<div style="font-family: Arial, sans-serif; line-height: 1.3; text-align: justify;"> 
+<p style="text-align: justify; text-indent: 40px; margin-bottom: 15px;">
+Data visualization is an important process in presenting raw data to be clearer and meaningful. These visualizations not only help us in understanding the distribution, comparison, and relationships between variables in a simple yet informative way, but also provide a basis for deeper analysis, finding hidden patterns and making data-driven decisions with greater confidence.
+</p>
+</div>
+
+<div style="font-family: Arial, sans-serif; line-height: 1.5; text-align: justify;"> 
+<p style="text-align: justify; text-indent: 40px; margin-bottom: 15px;">
+
+| **Type** | **Type Data** | **Function** | **Pros** | **Cons** |
+|------|------|----------|-----------|----------|
+| **Line Chart** | Continuous, Time-series  | Used to display trends or changes in continuous data over a specific period. | Highly effective for time-series data. | Not suitable for discrete categories and can become confusing if there are too many lines.|
+| **Bar Chart** | Categorical, Discreate | Compares values across different categories or groups. | Easy to understand for comparing categorical data. | Less effective for data with too many categories. |
+| **Histogram** | Continuous | Shows the frequency distribution of a single numerical variable. | Easy to understand for comparing categorical data. | Difficult to compare multiple groups becuase overlaying several histograms often results in cluttered and confusing visuals. |
+| **Boxplot** | Continuous | Displays a five-number statistical summary (minimum, first quartile, median, third quartile, and maximum) and identifies outliers. | Excellent for comparing distributions between groups. | Individual data points are invisible; not suitable when exact values matter. |
+| **Scatter Plot** | Continuous, Numeric | Shows the relationship or correlation between two numerical variables. | Uses dots on the X and Y axes to indicates the direction of the relationship (positive, negative, or no correlation). | Limited to few variables, typically shows only two variables clearly. |
+| **Pie Chart** | Categorical | Displays proportions or parts of a whole. | Effective when used to display 2-5 data recorded in percentage or proportion. | Ineffective with many categories; too many slices can create confusion.|
+</p>
+</div>
+
+
+
+### Chapter 4  {data-width=1600}
+
+<div style="font-family: Arial; text-align:center; font-size:120%;">
+**Central Tendency**
+</div>
+
+<div style="font-family: Arial, sans-serif; line-height: 1.3; text-align: justify;"> 
+<p style="text-align: justify; text-indent: 40px; margin-bottom: 15px;">
+Central tendency is a single value that attempts to describe a set of data by identifying the central point within that dataset. These statistical tools offer a concise summary of complex information, making it easy to detect patterns, describe distributions, and lay the groundwork for more in-depth analysis. There are **three primary measures**.
+</p>
+</div>
+
+<div style="font-family: Arial, sans-serif; line-height: 1.5; text-align: justify;"> 
+<p style="text-align: justify; text-indent: 40px; margin-bottom: 15px;">
+|    | **Mean** | **Median** | **Mode** |
+|----|----------|----------|----------|
+| **Definition** | The arithmetic average of all scores in the data. | The middle value in a dataset that has been ordered from smallest to largest. | The value that appears most frequently in a dataset. Data can have one mode (unimodal), two modes (bimodal), or more (multimodal). |
+| **Formula** | $\bar{X} = \frac{\sum X_i}{n}$, where $X_i$ is each data value and $n$ is number of observation | If the number of data point n is **odd**, the median is $\frac{n+1}{2}$;  if n is **even**, the median is the average of the two middle values | |
+| **Type of Data** | Interval/Ratio; Numeric data with meaningful intervals | Ordinal; Data in categories | Nominal or Ordinal | Ordered data without equal spacing |
+| **Data Conditions** | Data without outliers and **symmetrical** | Data with outliers or **skewed** distribution | Categorical data and **multimodal** data |
+|**Visualization**|Histogram + Density | Histogtam + Density | Boxplot and Histogram + Density| 
+|**Explanation**| When the data is **symmetrical and no outliers**, the **mean** gives a good overall representation and in this conditions, the **mean , median,** and **mode** are equal or nearly identical, reflecting perfect equilibrum in the data | A skewed distributions indicates that the dataset is asymmetrical, meaning the data don't fall evenly around the central point. The outliers causses this imbalance, pulling one side of the distribution's tail farther than the other. In this conditions, the **median** is more reliable because it is not affected by those extremes.  | For **categorical variables**, the **mode** identifies the most frequent category and some datasets with multiple peaks, there can be  **more than one mode**, indicating several dominant values of groups. Using Boxplot for categorical data are valuable for defecting differences in distributions among groups and if more than one mode, the histogram reveals the overall shape and multiple modes while the boxplot emphasizes the spread and skewness of the data|
+</p>
+</div>
+
+
+### Chapter 5 {data-width=1200}
+
+<div style="font-family: Arial; text-align:center; font-size:120%;">
+**Statistical Dispersion** 
+</div>
+
+<div style="font-family: Arial, sans-serif; line-height: 1.3; text-align: justify;"> 
+<p style="text-align: justify; text-indent: 40px; margin-bottom: 15px;">
+Dispersion or variability is a measure that shows how far a value in the distribution of data spreads from its central point (Central Tendency). It is important because, two data sets can have identical means, but their characteristics are completely different. One data may cluster tightly in the middle, while the other is widespread. Understanding dispersion provides an idea of the consistency and reliability of the data. There are **Main Parameters of Dispersion**.
+</p>
+</div>
+
+<div style="font-family: Arial, sans-serif; line-height: 1.5; text-align: justify;"> 
+<p style="text-align: justify; text-indent: 40px; margin-bottom: 15px;">
+|            | Range |  Variance  | Standard Deviation |
+|------------|-------|------------|--------------------|
+| **Definition** | The difference between the maximum and minimum values | Measures the average of the squared deviatins from the mean | The square root of the variance |
+| **Characteristics** | Easiest to calculate, but very sensitive to outliers and does not describe the distribution of data among extreme values| Quantifies how much each data point differs form the mean, capturing the degree of the spread inn dataset | Measures the average distance of each data point form the mean an dis expressed in the same unit as teh original data|
+|**Formula**| $Range = X_{max} - X_{min}$| For a population = $\sigma^2 = \frac{\sum_{i=1}^{N}(X_i - \mu)^2}{N}$ | For a Population = $\sigma = \sqrt{\frac{\sum_{i=1}^{N}(X_i - \mu)^2}{N}}$ |
+| | | For a sample, $s^2 = \frac{\sum_{i=1}^{n}(X_i - \bar{X})^2}{n-1}$| For a sample, $s = \sqrt{\frac{\sum_{i=1}^{n}(X_i - \bar{X})^2}{n-1}}$|
+</p>
+</div>
+
+<div style="font-family: Arial, sans-serif; line-height: 1.3; text-align: justify;"> 
+<p style="text-align: justify; text-indent: 40px; margin-bottom: 15px;">
+This material concludes that in statistical analysis, the average can be misleading. Without looking at the size of the dispersion, we cannot assess the risk or consistency of a phenomenon. In a medical or scientific context, low dispersion is often more desirable because the results are more predictable for each individual.
+</p>
+</div>
+
+
+### Chapter 6 {data-width=1200}
+
+<div style="font-family: Arial; text-align:center; font-size:120%;">
+**Essentials of Probability**
+</div>
+
+<div style="font-family: Arial, sans-serif; line-height: 1.3; text-align: justify;"> 
+<p style="text-align: justify; text-indent: 40px; margin-bottom: 15px;">
+The probability of an event is related to the relationship between events that are likely to occur. Probability is a numerical measure used to describe the chances or likelihood of an event occurring. Formally, probability is defined as the ratio between the number of desired events and the number of possible events as a whole.  The probability is always between 0 and 1, where 0 indicates that the event must not have happened, while 1 indicates that the event must have happened. Probability is not just an intuition, but a systematic framework for measuring the likelihood of an event occurring. This understanding is important for making evidence-based decisions. There are **Basis of Probability**.
+</p>
+</div>
+
+
+<div style="font-family: Arial, sans-serif; line-height: 1.5; text-align: justify;"> 
+<p style="text-align: justify; text-indent: 40px; margin-bottom: 15px;">
+|  | **Definition** | **Formula** | 
+|---|------|------|
+|**Probability**|Probability can be define as the chance that an event will occur.|$P(A) = \frac { (number \ of \ favorable \ outcomes \ (n(A))}{ (total \ out \ comes \  (n(S))}$|
+|**Complement Rule**|The probability that an event did not occur.|$P(A^c) = 1 - P(A)$| 
+|**Inpendents**| The occurrence of one event does not affect the chances of another event occurring |$P(A∩B)=P(A)×P(B)$|
+|**Dependent**|The occurrence of one event affects the probability of another.|$P(A \ and \ B)=P(A)×P(B \ after \ A \ happened)$ |
+|**Union of Events**|Calculates the probability that at least one of several events occurs.|$P(A \ or \ B)=P(A)+P(B)−P(A \ and \ B)$ |
+|**Mutually Exclusive**|Two events that cannot occur at the same time|$P(A∩B)=0$|
+|**Exhaustive Events**|A set of events that includes all the possibilities in the sample space|$P(A∪B)=1$ |
+|**Binomial Distribution**|the probability of getting a certain number of successes from a large number of experiments|$P(X) = \binom{n}{x} p^{x} (1 - p)^{n - x}$|
+|**Binomial Experiment**| An experiment that have 2 outcomes, "**success** or **failure**| |
+</p>
+</div>
+
+
+
+
+
+### Chapter 7 {data-width=1200}
+
+<div style="font-family: Arial; text-align:center;  font-size:120%;">
+**Probability Distributions**
+</div>
+
+<div style="font-family: Arial, sans-serif; line-height: 1.5; text-align: justify;"> 
+<p style="text-align: justify; text-indent: 40px; margin-bottom: 15px;">
+A probability distribution is a mathematical function that assigns the probabilities of different outcomes to the possible values of a random variable. It provides a way of modeling the likelihood of each outcome in a random experiment. While a Frequency Distribution shows how often outcomes occur in a sample or dataset, a probability distribution assigns probabilities to outcomes abstractly, theoretically, regardless of any specific dataset. These probabilities represent the likelihood of each outcome occurring.
+</p>
+</div>
+
+|**Main Topic**|**Definition**|**Key Concept**|**Essential Formula/Rules**|
+|--|-----|-----|-----|
+|**Continuous Random Variable**|Continuous random variable is a type of random variable that can take on an infinite number of possible values within a given range(e.g., time, weight).| Probability is the Area Under the Curve for a range, not a single point ($P(X=x)=0$).| Total area under PDF = 1. CDF is used to calculate cumulative probability.|
+|**Sampling Dsitribution**|A sampling distribution represents the probability distribution of a statistic (such as the mean or standard deviation) that is calculated from multiple samples of a population.|Distinguishes between Population, Sample, and the Distribution of Means.|Standard Error (SE): Measures the variability of sample means ($SE = \sigma/\sqrt{n}$).|
+|**Central Limit Theorem (CLT)**|Central Limit Theorem predicts the shape of a sampling distribution based on the sample size.|If $n \geq 30$, the sampling distribution will be Normal, regardless of population shape.|Allows the use of Z or T distributions for large samples even if population is skewed.|
+|**Sample Proportion**|Probability distribution for qualitative data (success/failure).|Estimating population percentages or ratios ($\hat{p}$).|Normality Condition: $np \geq 10$ and $n(1-p) \geq 10$.|
+
+
+### Chapter 8 {data-width=1200}
+
+```{r echo=FALSE}
+library(htmltools)
+
+HTML('
+<div class="content-tab-wrapper">
+  <div class="content-tab-container">
+    <button class="tab-btn active" data-target="chapter8-tab1">CI<br>Methods</button>
+    <button class="tab-btn" data-target="chapter8-tab2">Critical Relationship</button>
+  </div>
+</div>
+
+<div class="content-tab-contents-wrapper">
+  
+  <!-- TAB 1: Confidence Interval Methods -->
+  <section id="chapter8-tab1" class="content-tab-section text-only active">
+    <div class="content-tab-left">
+      <center><h1>Confidence Interval Methods</h1></center>
+      
+      <div style="font-family: Arial, sans-serif; line-height: 1.3; text-align: justify;">
+        <p style="text-align: justify; text-indent: 40px; margin-bottom: 15px;">
+          Confidence interval is a range of values used to estimate a population parameter (such as a mean) more reliably than a single point estimate. It is constructed by taking a sample mean and adding or subtracting a margin of error. Essentially, this method provides a way to quantify the uncertainty and precision of an estimate derived from sample data.
+        </p>
+      </div>
+
+      <h3>Comparison of Confidence Interval Methods</h3>
+      <table>
+        <thead>
+          <tr>
+            <th></th>
+            <th><strong>Z-Distribution</strong></th>
+            <th><strong>T-Distribution</strong></th>
+            <th><strong>Sample Size</strong></th>
+            <th><strong>Proportion</strong></th>
+            <th><strong>One-Sided</strong></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>When to Use</strong></td>
+            <td>When population standard deviation (\\(\\sigma\\)) is known; When sample size is large (\\(n>30\\))</td>
+            <td>When population standard deviation (\\(\\sigma\\)) is unknown; When sample size is small (\\(n<30\\))</td>
+            <td>To ensure that the sample is large enough to provide <strong>accurate and reliable estimates</strong></td>
+            <td>To estimate the true population proportion based on sample data</td>
+            <td>When research focuses on minimum or maximum performance, not a full range</td>
+          </tr>
+          <tr>
+            <td><strong>Formula</strong></td>
+            <td>\\(\\bar{x} \\pm z_{\\alpha/2}\\left(\\frac{\\sigma}{\\sqrt{n}}\\right)\\)</td>
+            <td>\\(\\bar{x} \\,\\pm\\, t_{\\alpha/2,\\, df} \\left( \\frac{s}{\\sqrt{n}} \\right)\\), where \\(df = n-1\\)</td>
+            <td>\\(n = \\left( \\frac{t_{\\alpha/2} \\times \\sigma}{E} \\right)^2\\)</td>
+            <td>\\(\\hat{p} \\,\\pm\\, z_{\\alpha/2} \\sqrt{\\frac{\\hat{p}(1 - \\hat{p})}{n}}\\)</td>
+            <td>\\(\\hat{p} \\pm z_{1-\\alpha} \\times  \\sqrt{\\frac{\\hat{p}(1 - \\hat{p})}{n}}\\)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- TAB 2: Critical Relationship -->
+  <section id="chapter8-tab2" class="content-tab-section text-only">
+    <div class="content-tab-left">
+      <center><h1>Critical Relationships in Confidence Intervals</h1></center>
+      
+      <div style="font-family: Arial, sans-serif; line-height: 1.3; text-align: justify;">
+        <p style="text-align: justify; text-indent: 40px; margin-bottom: 10px;">
+          Understanding how different factors affect confidence interval width is crucial for proper interpretation and sample size planning.
+        </p>
+      </div>
+      
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 40%;">Critical Relationship</th>
+              <th style="width: 60%;">Effect on Confidence Interval</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Sample size (\\(n\\)) \\(\\uparrow\\)</strong></td>
+              <td>As the sample size increases, the Standard Error decreases, making the interval narrower (more precise)</td>
+            </tr>
+            <tr>
+              <td><strong>Confidence Level \\(\\uparrow\\)</strong></td>
+              <td>If moving from \\(90\\%\\) to \\(99\\%\\), the interval becomes wider (more conservative)</td>
+            </tr>
+            <tr>
+              <td><strong>Standard Deviation \\(\\uparrow\\)</strong></td>
+              <td>More "noise" or variation in the data results in a wider interval (less precise)</td>
+            </tr>
+          </tbody>
+        </table>
+
+      <div style="border: 1px solid #ddd; padding: 15px; border-radius: 3px; background: #f9f9f9; margin: 20px 0;">
+        <div style="font-weight: bold; color: #333; margin-bottom: 6px;">Key Insight:</div>
+        <div style="font-size: 14px; line-height: 1.5; color: #555;">
+          There is always a trade-off between precision (narrow interval) and confidence (wider interval). Increasing sample size is the most effective way to improve both precision and confidence.
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+')
+```
+
+### Chapter 9  {data-width=1200}
+
+```{r echo=FALSE}
+library(htmltools)
+
+HTML('
+<div class="content-tab-wrapper">
+  <div class="content-tab-container">
+    <button class="tab-btn active" data-target="chapter9-tab1">Basic<br>Concepts</button>
+    <button class="tab-btn" data-target="chapter9-tab2">Hypothesis Tests</button>
+    <button class="tab-btn" data-target="chapter9-tab3">Decision Making</button>
+  </div>
+</div>
+
+<div class="content-tab-contents-wrapper">
+  
+  <!-- TAB 1: Basic Concepts -->
+  <section id="chapter9-tab1" class="content-tab-section text-only active">
+    <div class="content-tab-left">
+      <center><h1>Basic Concepts of Statistical Inference</h1></center>
+      
+      <div style="font-family: Arial, sans-serif; line-height: 1.3; text-align: justify;">
+        <p style="text-align: justify; text-indent: 40px; margin-bottom: 15px;">
+          Statistical inference is the process of drawing conclusions about a population based on information obtained from a sample. This allows researchers and analysts to make generalizations, predictions, and decisions under conditions of uncertainty. Highlights its three main components: <strong>Statistical hypothesis</strong>, <strong>hypothesis testing methods</strong>, and <strong>decision-making</strong>.
+        </p>
+      </div>
+
+      <h4>Hypothesis Fundamentals</h4>
+      <table>
+        <thead>
+          <tr>
+            <th>Term</th>
+            <th>Symbol</th>
+            <th>Definition</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Null Hypothesis</strong></td>
+            <td>\\(H_0\\)</td>
+            <td>Represents the assumption that there is <strong>no effect, no difference, or no relationship</strong> in the population</td>
+          </tr>
+          <tr>
+            <td><strong>Alternative Hypothesis</strong></td>
+            <td>\\(H_1\\) or \\(H_a\\)</td>
+            <td>Statement we want to prove; indicates a difference, relationship, or effect</td>
+          </tr>
+          <tr>
+            <td><strong>P-value</strong></td>
+            <td>\\(p\\)</td>
+            <td>Probability that observed results happened by chance if \\(H_0\\) is true</td>
+          </tr>
+          <tr>
+            <td><strong>Significance Level</strong></td>
+            <td>\\(\\alpha\\)</td>
+            <td>"Threshold" for evidence (usually 0.05)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- TAB 2: Hypothesis Tests -->
+  <section id="chapter9-tab2" class="content-tab-section text-only">
+    <div class="content-tab-left">
+      <center><h1>Hypothesis Testing Methods</h1></center>
+      
+      <div style="font-family: Arial, sans-serif; line-height: 1.3; text-align: justify;">
+        <p style="text-align: justify; text-indent: 40px; margin-bottom: 15px;">
+          Hypothesis testing methods are used to determine whether the evidence form a sample is strong enough to reject the null hypothesis in favor of the alternative hypothesis. The choice of test depends on the <strong>type of data</strong>, <strong>sample size</strong>, and <strong>population characteristic</strong>.
+        </p>
+      </div>
+
+      <h3>Comparison of Statistical Tests</h3>
+      <table>
+        <thead>
+          <tr>
+            <th><strong>Z-Test</strong></th>
+            <th><strong>T-Test</strong></th>
+            <th><strong>Chi-Square Test</strong></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <strong>Function:</strong> Compare means with known \\(\\sigma\\) or large \\(n\\)<br>
+              <strong>Formula:</strong> \\(z = \\frac{\\bar{x} - \\mu}{\\sigma/\\sqrt{n}}\\)<br>
+              <strong>Example:</strong> Test if new teaching method changes scores
+            </td>
+            <td>
+              <strong>Function:</strong> Compare means with unknown \\(\\sigma\\) and small \\(n\\)<br>
+              <strong>Formula:</strong> \\(t = \\frac{\\bar{x} - \\mu}{s/\\sqrt{n}}\\)<br>
+              <strong>Example:</strong> Test if average score differs from 80
+            </td>
+            <td>
+              <strong>Function:</strong> Test categorical data distributions<br>
+              <strong>Formula:</strong> \\(\\chi^2 = \\sum\\frac{(O-E)^2}{E}\\)<br>
+              <strong>Example:</strong> Test if gender is independent of learning preference
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- TAB 3: Decision Making -->
+  <section id="chapter9-tab3" class="content-tab-section text-only">
+    <div class="content-tab-left">
+      <center><h1>Statistical Decision Making</h1></center>
+      <table>
+        <thead>
+          <tr>
+            <th>Error Type</th>
+            <th>Definition</th>
+            <th>Probability</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Type I Error</strong></td>
+            <td>Rejecting \\(H_0\\) when it\'s true (False Positive)</td>
+            <td>\\(\\alpha\\), commonly 0.05</td>
+          </tr>
+          <tr>
+            <td><strong>Type II Error</strong></td>
+            <td>Failing to reject \\(H_0\\) when it\'s false (False Negative)</td>
+            <td>\\(\\beta\\); power \\(=1-\\beta\\)</td>
+          </tr>
+        </tbody>
+      </table>
+      
+      <!-- Simple Decision Rules using your div style -->
+      <div style="border: 1px solid #ddd; padding: 15px; border-radius: 3px; background: #f9f9f9; margin: 15px 0;">
+        <div style="font-weight: bold; color: #333; margin-bottom: 10px;">Decision Rules Based on P-value:</div>
+        
+        <div style="display: flex; gap: 15px; margin-top: 10px;">
+          <div style="flex: 1; padding: 10px; background: #e8f5e8; border-radius: 3px; border-left: 4px solid #28a745;">
+            <div style="font-weight: bold; color: #155724;">If P-value < α</div>
+            <div style="margin-top: 5px; font-size: 16px; font-weight: bold; color: #155724;">→ Reject H₀</div>
+            <div style="margin-top: 5px; font-size: 14px; color: #155724;">(Statistically Significant)</div>
+          </div>
+          
+          <div style="flex: 1; padding: 10px; background: #fdeaea; border-radius: 3px; border-left: 4px solid #dc3545;">
+            <div style="font-weight: bold; color: #721c24;">If P-value ≥ α</div>
+            <div style="margin-top: 5px; font-size: 16px; font-weight: bold; color: #721c24;">→ Fail to reject H₀</div>
+            <div style="margin-top: 5px; font-size: 14px; color: #721c24;">(Not Significant)</div>
+          </div>
+        </div>
+      </div>
+  </section>
+</div>
+')
+```
+
+### Chapter 10  {data-width=1200}
+
+<div style="font-family: Arial; text-align:center;font-size:120%;">
+**Nonparametric Methods**
+</div>
+
+<div style="font-family: Arial, sans-serif; line-height: 1.3; text-align: justify;"> 
+<p style="text-align: justify; text-indent: 40px; margin-bottom: 15px;">
+Nonparametric statistics are statistical methods that do not require the assumption of a normal distribution in population data.  Nonparametric methods serve as alternatives when the basic assumptions of parametric statistics are not met. Their primary role is to provide flexibility in analyzing data with a low measurement scale (ordinal/nominal) or data with extreme outliers. These methods serve as alternatives when parametric statistics cannot be used, such as for categorical data.
+</p>
+</div>
+
+<div style="font-family: Arial, sans-serif; line-height: 1.5; text-align: justify;"> 
+<p style="text-align: justify; text-indent: 40px; margin-bottom: 15px;">
+| Nonparametric Tests | Parametric Equivalents | Main Uses | Advantages | Disadvantages |
+| -- | -- | --- |---|---|
+| **Sign Test** | One-sample t-test | Tests the difference in medians based on the sign (+ or -). | Fewer assumptions; extremely robust to outliers | Very low statistical power|
+| **Wilcoxon Signed-Rank** | Paired sample t-test | Compares two paired samples (before vs. after). | More powerful than sign test | Requires symmetric distribution of difference|
+| **Mann-Whitney U** | Independent t-test | Compares two independent groups (two different populations). | Suitable for ordinal data| Test distributional shift rather than mean difference |
+| **Kruskal-Wallis** | One-Way ANOVA | Compares more than two independent groups. | Extend Mann-Whitney to multiple groups | Doesn't indicate which groups differ without post-hoc tests|
+| **Friedman Test** | Repeated Measures ANOVA | Compares more than two paired groups. | Suitable for repeated measures | Less powerful than parametric repeated measures ANOVA|
+| **Chi-Square Test** | - | Tests the relationship (independence) between two categorical variables. | Ideal for categorical data | sensitive to small expected frequencies|
+</p>
+</div>
+
+
+Dataset {data-orientation=rows}
+=======================================================================
+   
+```{r}
+library(DT)
+library(dplyr)
+
+data <- read.csv(
+  "supermarket_sales.csv",
+  stringsAsFactors = FALSE
+)
+
+data_selected <- data %>%
+  select(-Invoice.ID,-cogs,-gross.margin.percentage,-Tax)
+
+data_selected[data_selected == ""] <- NA
+data_complete <- na.omit(data_selected)
+
+datatable(
+  data_complete,
+  rownames = FALSE,
+  options = list(
+    pageLength = 10,
+    lengthMenu = c(5, 10, 25, 50),
+    scrollX = TRUE,
+    autoWidth = TRUE,
+    dom = "Bfrtip",
+    columnDefs = list(
+      list(className = "dt-center", targets = "_all")
+    ),
+    initComplete = JS(
+      "function(settings, json) {",
+      "$(this.api().table().header()).css({'background-color': '#393940', 'color': 'white'});",
+      "$(this.api().table().container()).find('td').css({'border-right': '1px solid #ddd'});",
+      "$(this.api().table().container()).find('th').css({'border-right': '1px solid #999'});",
+      "}"
+    )
+  ),
+  
+  caption = htmltools::tags$caption(
+    style = "
+      caption-side: top;
+      text-align: center;
+      font-weight: bold;
+      font-size: 16px;
+      color: #2c3e50;
+    ",
+    "Super Market Sales"
+  )
+) %>%
+  formatStyle(
+    names(data_complete),
+    fontFamily = "Arial",
+    fontSize = "13px",
+    backgroundColor = styleEqual(
+      unique(seq_len(nrow(data_complete)) %% 2),
+      c('#f5f5f5', '#ffffff')
+    ),
+    borderRight = '1px solid #2F4F4F'
+  ) %>%
+  formatStyle(
+    0,
+    target = 'row',
+    backgroundColor = '#FAEBD7',
+    color = '#393940',
+    fontWeight = 'bold'
+  )
+```
+
+All About Basic Visualizations {data-orientation=rows}
+=======================================================================
+
+## Column {.tabset .tabset-fade data-height=520}
+-----------------------------------------------------------------------
+  
+### Pie-Chart {data-width=600 data-height=510}
+
+```{r echo=FALSE}
+library(highcharter)
+library(dplyr)
+htmltools::HTML('
+<div class="content-tab-wrapper">
+  <div class="content-tab-container">
+    <button class="tab-btn active" data-target="pie-visual-tab">Visual</button>
+    <button class="tab-btn" data-target="pie-interpretation-tab">Interpretation</button>
+  </div>
+</div>
+<div class="content-tab-contents-wrapper">
+  <section id="pie-visual-tab" class="content-tab-section active">
+    <div class="content-tab-right">
+')
+  
+  data <- read.csv("supermarket_sales.csv")
+  
+  # 1. PRODUCT LINE DISTRIBUTION - Transactions by Product Category
+  product_data <- data %>%
+    group_by(Product.line) %>%
+    summarise(
+      transaction_count = n(),
+      total_sales = sum(Total, na.rm = TRUE),
+      total_quantity = sum(Quantity, na.rm = TRUE)
+    ) %>%
+    mutate(
+      percentage = round(transaction_count / sum(transaction_count) * 100, 1)
+    ) %>%
+    arrange(desc(transaction_count))
+  
+  highchart(height = 400, width = 1300) %>%  # Tinggi chart diubah ke 380 sesuai permintaan Anda
+    hc_chart(type = "pie") %>%
+    hc_title(text = "Transaction Distribution by Product Category") %>%
+    hc_subtitle(text = "Percentage based on number of transactions") %>%
+    hc_series(
+      list(
+        name = "Transactions",
+        data = list_parse(
+          data.frame(
+            name = product_data$Product.line,
+            y = product_data$transaction_count,
+            sales = product_data$total_sales,
+            quantity = product_data$total_quantity,
+            percentage = product_data$percentage,
+            color = viridis::viridis(nrow(product_data))  # Color palette
+          )
+        )
+      )
+    ) %>%
+    hc_plotOptions(
+      pie = list(
+        innerSize = "45%",
+        allowPointSelect = TRUE,
+        cursor = "pointer",
+        dataLabels = list(
+          enabled = TRUE,
+          format = "<b>{point.name}</b><br/>{point.percentage:.1f}%",
+          style = list(fontSize = "11px")
+        )
+      )
+    ) %>%
+    hc_tooltip(
+       pointFormat = "<div style='text-align: center;'>
+                    <span style='color:{point.color}; font-size: 20px'>●</span><br/>
+                    <b style='font-size: 14px;'>{point.name}</b><br/><br/>
+                    <hr style='margin: 5px 0;'>
+                    <div style='text-align: left;'>
+                    - Quantity Sold: <b>{point.quantity}</b> units<br/>
+                    - Total Sales: <b>${point.sales:,.0f}</b>
+                    </div>
+                    </div>"
+    ) %>%
+    hc_legend(
+      enabled = FALSE)
+
+htmltools::HTML('
+      <style>
+        .content-tab-right > div {
+          transform: translateY(-65px);  /* Geser chart ke atas sebesar 50px (sesuaikan jika perlu, misalnya -30px atau -70px) */
+          box-shadow: none;  /* Hapus box-shadow untuk tampilan lebih clean */
+          transition: transform 0.3s ease;  /* Opsional: transisi halus */
+        }
+      </style>
+    </div>
+  </section>
+  <section id="pie-interpretation-tab" class="content-tab-section text-only">
+    <div class="content-tab-left">
+      <div>
+  <center><h1>Pie Chart Interpretation</h1></center>
+<div style="line-height: 1.3; text-align: justify;">
+<p style="text-align: justify; text-indent: 40px; margin-bottom: 15px;">
+This visualization presents a clear visual hierarchy of product performance. The largest slice, which is almost certainly <strong>"Food and beverages"</strong>, commands immediate attention by occupying a dominant portion of the circle, likely representing over 25% of total transactions. The remaining slices for categories like "Electronic accessories," "Home and lifestyle," and "Sports and travel" form a visually descending order of size, creating an instant understanding of market share. The use of a <strong>distinct color palette (Viridis)</strong> is functionally critical, allowing the eye to differentiate between adjacent categories like "Fashion accessories" and "Health and beauty" at a glance. The <strong>donut hole</strong> is not merely an aesthetic choice; it creates negative space that makes the chart feel less cluttered and provides a clear canvas for the direct data labels on each slice, improving readability compared to a separate legend.</p>
+
+<p style="text-align: justify; text-indent: 40px; margin-bottom: 15px;">The visual dominance of one category confirms it as the primary <strong>traffic driver and a key footfall reason</strong> for the supermarket. However, the most critical insight comes from the interactive <strong>tooltip</strong>. A manager must compare the ranking by <strong>transaction count</strong> (visually obvious in the chart) with the ranking by <strong>total sales revenue</strong> (visible in the tooltip). If the order differs—for instance, if "Health and beauty" has fewer transactions but a higher total sales figure—it reveals a <strong>high-value segment</strong> with a larger average basket size. Conversely, a category with many transactions but lower total sales might indicate a <strong>high-volume, low-margin</strong> business. Therefore, this pie chart excels at identifying volume leaders but must be paired with revenue data to guide strategic decisions on inventory investment, promotions, and floor space allocation.</p>
+
+</div>
+    </div>
+  </section>
+</div>
+')
+```
+
+
+### Bar-Chart {data-width=600 data-height=510}
+
+```{r echo=FALSE}
+library(highcharter)
+library(dplyr)
+htmltools::HTML('
+<div class="content-tab-wrapper">
+  <div class="content-tab-container">
+    <button class="tab-btn active" data-target="bar-visual-tab">Visual</button>
+    <button class="tab-btn" data-target="bar-interpretation-tab">Interpretation</button>
+  </div>
+</div>
+<div class="content-tab-contents-wrapper">
+  <section id="bar-visual-tab" class="content-tab-section active">
+    <div class="content-tab-right">
+')
+
+library(highcharter)
+
+# Branch performance by sales
+branch_data <- data %>%
+  group_by(Branch) %>%
+  summarise(
+    total_sales = sum(Total, na.rm = TRUE),
+    transaction_count = n(),
+    avg_sale = mean(Total, na.rm = TRUE)
+  ) %>%
+  arrange(desc(total_sales))
+
+highchart(height = 380, width = 1300) %>%
+  hc_chart(type = "bar") %>%
+  hc_title(text = "Branch Performance by Total Sales") %>%
+  hc_xAxis(categories = paste("Branch", branch_data$Branch)) %>%
+  hc_yAxis(
+    title = list(text = "Total Sales ($)"),
+    labels = list(format = "${value}")
+  ) %>%
+  hc_series(
+    list(
+      name = "Total Sales",
+      data = lapply(1:nrow(branch_data), function(i) {
+        list(
+          y = branch_data$total_sales[i],
+          transactions = branch_data$transaction_count[i],
+          avg = branch_data$avg_sale[i]
+        )
+      }),
+      showInLegend = FALSE,
+      colorByPoint = TRUE,
+      colors = c("#FF6384", "#36A2EB", "#FFCE56")
+    )
+  ) %>%
+  hc_tooltip(
+    pointFormat = "<b>{point.category}</b><br/>
+                  Total Sales: <b>${point.y:,.0f}</b><br/>
+                  Transactions: <b>{point.transactions}</b><br/>
+                  Avg per Sale: <b>${point.avg:,.2f}</b>"
+  )
+
+htmltools::HTML('
+      <style>
+        .content-tab-right > div {
+          transform: translateY(-65px);  /* Geser chart ke atas sebesar 50px (sesuaikan jika perlu, misalnya -30px atau -70px) */
+          box-shadow: none;  /* Hapus box-shadow untuk tampilan lebih clean */
+          transition: transform 0.3s ease;  /* Opsional: transisi halus */
+        }
+      </style>
+    </div>
+  </section>
+  <section id="bar-interpretation-tab" class="content-tab-section text-only">
+    <div class="content-tab-left">
+      <div>
+  <center><h1>Bar Chart Interpretation</h1></center>
+<div style="line-height: 1.3; text-align: justify;">
+<p style="text-align: justify; text-indent: 40px; margin-bottom: 15px;">
+This visualization provides a direct, unambiguous comparison of revenue generation across the three supermarket branches. The tallest bar, representing the top-performing branch, will be positioned on the left (due to <code>arrange(desc(total_sales))</code>), creating an instant visual ranking. The use of <strong>distinct, contrasting colors</strong> (pink, blue, yellow) for each bar eliminates any need for cross-referencing a legend and allows for immediate branch identification. The <strong>embedded bar labels</strong> via tooltip containing <em>Total Sales</em>, <em>Number of Transactions</em>, and <em>Average Sale Value</em> transforms a simple comparison into a multi-dimensional performance dashboard.</p>
+<p style="text-align: justify; text-indent: 40px; margin-bottom: 15px;">
+The primary insight is the clear performance hierarchy, identifying the <strong>revenue leader and laggard</strong>. However, the true analytical power lies in the secondary metrics. By examining the tooltip data, one can decipher the <strong>business model</strong> of each branch. A branch with the tallest bar (highest total sales) driven by a high <em>Average per Sale</em> suggests a customer base with larger basket sizes or a focus on premium products. Another branch might achieve a similar total sales figure through a significantly higher <em>Transactions</em> count but a lower average sale, indicating a high-volume, low-margin operation. This distinction is crucial for tailoring management strategies—whether to focus on increasing customer traffic, upselling, or optimizing operations for efficiency.</p>
+
+</div>
+    </div>
+  </section>
+</div>
+')
+```
+
+### Line-Chart {data-width=600 data-height=510}
+
+```{r echo=FALSE}
+library(highcharter)
+library(dplyr)
+htmltools::HTML('
+<div class="content-tab-wrapper">
+  <div class="content-tab-container">
+    <button class="tab-btn active" data-target="line-visual-tab">Visual</button>
+    <button class="tab-btn" data-target="line-interpretation-tab">Interpretation</button>
+  </div>
+</div>
+<div class="content-tab-contents-wrapper">
+  <section id="line-visual-tab" class="content-tab-section active">
+    <div class="content-tab-right">
+')
+
+library(highcharter)
+
+# Essential daily sales data
+essential_data <- data %>%
+  mutate(Date = as.Date(Date, format = "%m/%d/%Y")) %>%
+  group_by(Date) %>%
+  summarise(
+    sales = sum(Total),
+    transactions = n()
+  ) %>%
+  arrange(Date)
+
+# Clean, focused line chart
+highchart(height = 430,width = 1250) %>%
+  hc_chart(type = "line") %>%
+  hc_title(text = "Sales Trend Overview") %>%
+  hc_subtitle(text = "Daily total sales across all branches") %>%
+  hc_xAxis(
+    type = "datetime",
+    title = list(text = "Date"),
+    labels = list(format = "{value:%b %d}")
+  ) %>%
+  hc_yAxis(
+    title = list(text = "Total Sales ($)"),
+    labels = list(format = "${value:,.0f}")
+  ) %>%
+  hc_series(
+    list(
+      name = "Daily Sales",
+      data = lapply(1:nrow(essential_data), function(i) {
+        list(
+          x = as.numeric(as.POSIXct(essential_data$Date[i])) * 1000,
+          y = essential_data$sales[i],
+          transactions = essential_data$transactions[i]
+        )
+      }),
+      color = "#3498DB",
+      lineWidth = 2
+    )
+  ) %>%
+  hc_tooltip(
+    pointFormat = "<b>{point.x:%b %d, %Y}</b><br/>
+                  Sales: <b>${point.y:,.0f}</b><br/>
+                  Transactions: <b>{point.transactions}</b>"
+  ) %>%
+  hc_legend(enabled = FALSE)
+
+htmltools::HTML('
+      <style>
+        .content-tab-right > div {
+          transform: translateY(-65px);  /* Geser chart ke atas sebesar 50px (sesuaikan jika perlu, misalnya -30px atau -70px) */
+          box-shadow: none;  /* Hapus box-shadow untuk tampilan lebih clean */
+          transition: transform 0.3s ease;  /* Opsional: transisi halus */
+        }
+      </style>
+    </div>
+  </section>
+  <section id="line-interpretation-tab" class="content-tab-section text-only">
+    <div class="content-tab-left">
+      <div>
+  <center><h1>Line Chart Interpretation</h1></center>
+<div style="line-height: 1.3; text-align: justify;">
+<p style="text-align: justify; text-indent: 40px; margin-bottom: 15px;">
+Line Chart Daily Sales Trend Overview:</strong> This visualization maps the pulse of the supermarket`s revenue over time, transforming daily sales figures into a clear narrative of peaks, troughs, and overall direction. The continuous <strong>blue line</strong> effectively connects individual data points, revealing the underlying trend and rhythmic patterns that would be lost in a bar chart. Key features like <strong>consistent weekly spikes</strong> (likely on weekends) or a <strong>gradual upward slope</strong> over the three-month period become immediately apparent. The choice of a clean, minimal theme ensures the data`s story remains the focal point.</p>
+
+<p style="text-align: justify; text-indent: 40px; margin-bottom: 15px;">
+The chart primary value is in identifying <strong>temporal patterns and anomalies</strong>. A regular, repeating pattern of highs and lows confirms a predictable <strong>weekly sales cycle</strong>, essential for staffing and inventory planning. A sustained upward trend suggests successful growth initiatives or seasonal effects. Conversely, a sudden, isolated dip or spike prompts investigation into external causes like holidays, promotions, or operational issues. By hovering over any point, the linked <strong>transaction count</strong> provides context: a high sales day with proportionally high transactions indicates broad-based demand, while high sales with average transactions suggests larger basket sizes, pointing to different types of customer behavior. This makes the line chart indispensable for performance review and forward planning.</p>
+</div>
+    </div>
+  </section>
+</div>
+')
+```
+
+
+### Central Tendency
+
+```{r echo=FALSE}
+
+library(highcharter)
+library(dplyr)
+htmltools::HTML('
+<div class="content-tab-wrapper">
+  <div class="content-tab-container">
+    <button class="tab-btn active" data-target="central-visual-tab">Visual</button>
+    <button class="tab-btn" data-target="central-interpretation-tab">Interpretation</button>
+  </div>
+</div>
+<div class="content-tab-contents-wrapper">
+  <section id="central-visual-tab" class="content-tab-section active">
+    <div class="content-tab-right">
+')
+
+library(highcharter)
+mean_val   <- mean(data$Total, na.rm = TRUE)
+median_val <- median(data$Total, na.rm = TRUE)
+
+# Mode (rounded to nearest 10)
+get_mode <- function(v) {
+  rounded <- round(v / 10) * 10
+  uniqv <- unique(rounded)
+  uniqv[which.max(tabulate(match(rounded, uniqv)))]
+}
+mode_val <- get_mode(data$Total)
+
+hist_data <- hist(
+  data$Total,
+  breaks = 20,
+  probability = TRUE,
+  plot = FALSE
+)
+
+bin_width <- diff(hist_data$breaks)[1]
+
+density_curve <- density(
+  data$Total,
+  bw   = bin_width * 0.8,
+  from = min(hist_data$breaks),
+  to   = max(hist_data$breaks),
+  n    = 512
+)
+
+scale_factor <- max(hist_data$density) / max(density_curve$y)
+
+highchart(height = 410, width = 1250) %>%
+  hc_chart(
+    type = "column",
+    backgroundColor = "#FFFFFF"
+  ) %>%
+  hc_title(
+    text = "Transaction Amount Distribution"
+  ) %>%
+  hc_subtitle(
+    text = "Histogram with Scaled Density Curve",
+    style = list(fontSize = "12px", color = "#7F8C8D")
+  ) %>%
+  hc_xAxis(
+    title = list(
+      text = "Transaction Amount ($)",
+      style = list(fontWeight = "bold")
+    ),
+    labels = list(format = "${value}"),
+    plotLines = list(
+      list(
+        value = mean_val,
+        color = "#E74C3C",
+        width = 2,
+        zIndex = 10,
+        label = list(
+          text = paste("Mean:", round(mean_val, 2)),
+          style = list(color = "#E74C3C", fontWeight = "bold")
+        )
+      ),
+      list(
+        value = median_val,
+        color = "#3498DB",
+        width = 2,
+        zIndex = 10,
+        label = list(
+          text = paste("Median:", round(median_val, 2)),
+          style = list(color = "#3498DB", fontWeight = "bold")
+        )
+      ),
+      list(
+        value = mode_val,
+        color = "#FFF000",
+        width = 2,
+        dashStyle = "Dot",
+        zIndex = 10,
+        label = list(
+          text = paste("Mode:", mode_val),
+          style = list(color = "#FFF000", fontWeight = "bold")
+        )
+      )
+    )
+  ) %>%
+  hc_yAxis(
+    title = list(text = "Density"),
+    min = 0
+  ) %>%
+  hc_series(
+    list(
+      name = "Histogram",
+      type = "column",
+      data = lapply(seq_along(hist_data$density), function(i) {
+        list(
+          x     = hist_data$mids[i],
+          y     = hist_data$density[i],
+          xFrom = hist_data$breaks[i],
+          xTo   = hist_data$breaks[i + 1],
+          count = hist_data$counts[i]
+        )
+      }),
+      pointRange = bin_width,
+      color = "rgba(52,152,219,0.6)",
+      borderColor = "#3498DB",
+      zIndex = 1
+    ),
+    
+    list(
+      name = "Density Curve",
+      type = "spline",
+      data = lapply(seq_along(density_curve$x), function(i) {
+        list(
+          x = density_curve$x[i],
+          y = density_curve$y[i] * scale_factor
+        )
+      }),
+      color = "#9B59B6",
+      lineWidth = 3,
+      marker = list(enabled = FALSE),
+      zIndex = 5
+    )
+  ) %>%
+  hc_plotOptions(
+    column = list(
+      pointPadding = 0,
+      groupPadding = 0,
+      borderWidth = 0.5
+    ),
+    spline = list(
+      marker = list(enabled = FALSE)
+    )
+  ) %>%
+  hc_tooltip(
+    shared = TRUE,
+    crosshairs = TRUE,
+    backgroundColor = "rgba(255, 255, 255, 0.95)",
+    borderWidth = 1,
+    borderColor = "#BDC3C7",
+    style = list(fontSize = "12px"),
+    formatter = JS("
+      function() {
+        var points = this.points;
+        var html = '';
+        if(points.length > 0) {
+          var point = points[0].point;
+          
+          if(points[0].series.name === 'Histogram') {
+            html += '<div style=\"padding: 5px;\">';
+            html += '<b>Range: $' + Math.round(point.xFrom) + ' - $' + Math.round(point.xTo) + '</b><br/>';
+            html += 'Density: <b>' + point.y.toFixed(4) + '</b><br/>';
+            html += 'Count: <b>' + point.count + ' transactions</b>';
+            html += '</div>';
+          } else if(points[0].series.name === 'Density Curve') {
+            // Density curve tooltip
+            html += '<div style=\"padding: 5px;\">';
+            html += '<b>Amount: $' + point.x.toFixed(2) + '</b><br/>';
+            html += 'Density: <b>' + point.y.toFixed(4) + '</b>';
+            html += '</div>';
+          }
+        }
+        return html;
+      }
+    ")
+  ) %>%
+  hc_legend(
+    enabled = FALSE)
+
+htmltools::HTML('
+      <style>
+        .content-tab-right > div {
+          transform: translateY(-65px);  /* Geser chart ke atas sebesar 50px (sesuaikan jika perlu, misalnya -30px atau -70px) */
+          box-shadow: none;  /* Hapus box-shadow untuk tampilan lebih clean */
+          transition: transform 0.3s ease;  /* Opsional: transisi halus */
+        }
+      </style>
+    </div>
+  </section>
+  <section id="central-interpretation-tab" class="content-tab-section text-only">
+    <div class="content-tab-left">
+      <div>
+  <center><h1>Central Tendency Interpretation</h1></center>
+<div style="central-height: 1.3; text-align: justify;">
+<p style="text-align: justify; text-indent: 40px; margin-bottom: 15px;">
+    <strong>Histogram with Density Curve of Transaction Value Distribution:</strong> This visualization reveals the core revenue structure of the supermarket. The pronounced, narrow peak in the $10-$50 range is the <strong>engine of customer traffic</strong>, representing high-frequency, low-margin purchases like daily essentials and impulse buys. The long right tail extending to $200+ represents the <strong>engine of significant revenue</strong>, coming from a smaller cohort of customers making large weekly shops, bulk purchases, or buying premium items.</p>
+    <p style="text-align: justify; text-indent: 40px; margin-bottom: 15px;"><strong>Key Business Insight & Strategy Implications:</strong> The supermarket successfully serves two distinct customer missions. To maximize profitability, strategies should differ: for the high-traffic, low-value segment, focus on optimizing checkout speed, promoting high-margin impulse items at point-of-sale, and volume-driven loyalty programs. For the high-value segment in the distribution`s tail, strategies should include targeted promotions for bulk items, personalized offers, and enhanced customer service to increase their basket size and retention.</p>
+</div>
+    </div>
+  </section>
+</div>
+')
+```
+
+### Statistical Dispersion
+
+```{r, echo=FALSE}
+library(highcharter)
+library(dplyr)
+library(plotly)
+library(viridis)
+library(DT)
+# Load data
+data <- read.csv("supermarket_sales.csv", stringsAsFactors = FALSE)
+htmltools::HTML('
+<div class="content-tab-wrapper">
+  <div class="content-tab-container">
+    <div class="tab-indicator"></div>
+    <button class="tab-btn active" data-target="dispersion-visual-tab">Visual</button>
+    <button class="tab-btn" data-target="dispersion-interpretation-tab">Interpretation</button>
+  </div>
+</div>
+<div class="content-tab-contents-wrapper">
+')
+htmltools::HTML('
+  <section id="dispersion-visual-tab" class="content-tab-section active">
+    <div class="content-tab-right">
+')
+branch_colors <- viridis(
+  3,
+  option = "turbo",
+  begin = 0.3,
+  end = 0.9
+)
+plot_ly(
+  data = data,
+  x = ~Branch,
+  y = ~Total,
+  type = "violin",
+  color = ~Branch,
+  colors = branch_colors,
+  box = list(visible = TRUE),
+  meanline = list(visible = TRUE),
+  points = "outliers",
+  jitter = 0.25,
+  scalemode = "width",
+  line = list(width = 1),
+  opacity = 0.8
+) %>%
+  layout(
+    title = list(
+      text = "Distribution of Total Sales per Branch<br><sup>Violin + Boxplot + Outliers</sup>"
+    ),
+    xaxis = list(title = "Branch"),
+    yaxis = list(title = "Total Sales", zeroline = FALSE),
+    showlegend = FALSE,
+    height = 400,
+    width = 1200
+  ) %>%
+  config(displayModeBar = FALSE)
+htmltools::HTML('
+      <style>
+        .content-tab-right > div {
+          transform: translateY(-65px);
+          box-shadow: none;
+          transition: transform 0.3s ease;
+        }
+      </style>
+    </div>
+  </section>
+')
+htmltools::HTML('
+  <section id="dispersion-interpretation-tab" class="content-tab-section text-only">
+    <div class="content-tab-left">
+      <center><h1>Statistical Dispersion</h1></center>
+      <div style="line-height: 1.3; text-align: justify;">
+        <p style="text-align: justify; text-indent: 40px; margin-bottom: 5px;">
+          This integrated analysis combines the visual pattern from the violin plot with precise statistical metrics from the summary table to evaluate branch performance holistically. The <strong>table provides the exact numerical evidence</strong> for observations made from the plot: a branch with a high <code>Variance</code> and <code>SD</code> in the table will correspond to the wider, shorter violin shape, indicating inconsistent customer spending. Conversely, a branch with low variance will have a tall, narrow violin, signifying stable transaction values.
+        </p>
+        <p style="text-align: justify; text-indent: 40px; margin-bottom: 15px;">
+          The most critical metric for stability is the <strong>coefficient of variation (CV = SD/Mean)</strong>, which the table currently lacks. A branch with a high mean but also a high SD (resulting in a high CV) has volatile revenue despite high sales, which is a different risk profile than a branch with lower mean and lower SD. Comparing the <code>Range</code> in the table with the outliers in the violin plot also shows if extreme values are skewing the statistics.
+        </p>
+      </div>
+      <div style="width: 100%; display: flex; justify-content: center; margin-top: 20px;">
+')
+
+branch_summary <- data %>%
+  group_by(Branch) %>%
+  summarise(
+    N_Transactions = n(),
+    Mean = mean(Total),
+    Median = median(Total),
+    Min = min(Total),
+    Max = max(Total),
+    Range = Max - Min,
+    Variance = var(Total),
+    SD = sd(Total),
+    Coef_Var = (sd(Total) / mean(Total)) %>% round(3),
+    IQR = IQR(Total),
+    .groups = "drop"
+  )
+
+datatable(
+  branch_summary %>% mutate(across(where(is.numeric), ~ round(., 2))),
+  options = list(dom = 't', paging = FALSE, ordering = FALSE),
+  rownames = FALSE
+)
+
+htmltools::HTML('
+      </div>
+    </div>
+  </section>
+</div>
+')
+```
+
+
+### Probability Distributions
+
+```{r, echo=FALSE}
+
+library(highcharter)
+library(dplyr)
+htmltools::HTML('
+<div class="content-tab-wrapper">
+  <div class="content-tab-container">
+    <button class="tab-btn active" data-target="probability-visual-tab">Visual</button>
+    <button class="tab-btn" data-target="probability-interpretation-tab">Interpretation</button>
+  </div>
+</div>
+<div class="content-tab-contents-wrapper">
+  <section id="probability-visual-tab" class="content-tab-section active">
+    <div class="content-tab-right">
+')
+
+library(highcharter)
+mean_val   <- mean(data$Total, na.rm = TRUE)
+median_val <- median(data$Total, na.rm = TRUE)
+
+# Mode (rounded to nearest 10)
+get_mode <- function(v) {
+  rounded <- round(v / 10) * 10
+  uniqv <- unique(rounded)
+  uniqv[which.max(tabulate(match(rounded, uniqv)))]
+}
+mode_val <- get_mode(data$Total)
+
+hist_data <- hist(
+  data$Total,
+  breaks = 20,
+  probability = TRUE,
+  plot = FALSE
+)
+
+bin_width <- diff(hist_data$breaks)[1]
+
+density_curve <- density(
+  data$Total,
+  bw   = bin_width * 0.8,
+  from = min(hist_data$breaks),
+  to   = max(hist_data$breaks),
+  n    = 512
+)
+
+scale_factor <- max(hist_data$density) / max(density_curve$y)
+
+highchart(height = 410, width = 1250) %>%
+  hc_chart(
+    type = "column",
+    backgroundColor = "#FFFFFF"
+  ) %>%
+  hc_title(
+    text = "Transaction Amount Distribution"
+  ) %>%
+  hc_subtitle(
+    text = "Histogram with Scaled Density Curve",
+    style = list(fontSize = "12px", color = "#7F8C8D")
+  ) %>%
+  hc_xAxis(
+    title = list(
+      text = "Transaction Amount ($)",
+      style = list(fontWeight = "bold")
+    ),
+    labels = list(format = "${value}"),
+    plotLines = list(
+      list(
+        value = mean_val,
+        color = "#E74C3C",
+        width = 2,
+        zIndex = 10,
+        label = list(
+          text = paste("Mean:", round(mean_val, 2)),
+          style = list(color = "#E74C3C", fontWeight = "bold")
+        )
+      ),
+      list(
+        value = median_val,
+        color = "#3498DB",
+        width = 2,
+        zIndex = 10,
+        label = list(
+          text = paste("Median:", round(median_val, 2)),
+          style = list(color = "#3498DB", fontWeight = "bold")
+        )
+      ),
+      list(
+        value = mode_val,
+        color = "#FFF000",
+        width = 2,
+        dashStyle = "Dot",
+        zIndex = 10,
+        label = list(
+          text = paste("Mode:", mode_val),
+          style = list(color = "#FFF000", fontWeight = "bold")
+        )
+      )
+    )
+  ) %>%
+  hc_yAxis(
+    title = list(text = "Density"),
+    min = 0
+  ) %>%
+  hc_series(
+    list(
+      name = "Histogram",
+      type = "column",
+      data = lapply(seq_along(hist_data$density), function(i) {
+        list(
+          x     = hist_data$mids[i],
+          y     = hist_data$density[i],
+          xFrom = hist_data$breaks[i],
+          xTo   = hist_data$breaks[i + 1],
+          count = hist_data$counts[i]
+        )
+      }),
+      pointRange = bin_width,
+      color = "rgba(52,152,219,0.6)",
+      borderColor = "#3498DB",
+      zIndex = 1
+    ),
+    
+    list(
+      name = "Density Curve",
+      type = "spline",
+      data = lapply(seq_along(density_curve$x), function(i) {
+        list(
+          x = density_curve$x[i],
+          y = density_curve$y[i] * scale_factor
+        )
+      }),
+      color = "#9B59B6",
+      lineWidth = 3,
+      marker = list(enabled = FALSE),
+      zIndex = 5
+    )
+  ) %>%
+  hc_plotOptions(
+    column = list(
+      pointPadding = 0,
+      groupPadding = 0,
+      borderWidth = 0.5
+    ),
+    spline = list(
+      marker = list(enabled = FALSE)
+    )
+  ) %>%
+  hc_tooltip(
+    shared = TRUE,
+    crosshairs = TRUE,
+    backgroundColor = "rgba(255, 255, 255, 0.95)",
+    borderWidth = 1,
+    borderColor = "#BDC3C7",
+    style = list(fontSize = "12px"),
+    formatter = JS("
+      function() {
+        var points = this.points;
+        var html = '';
+        if(points.length > 0) {
+          var point = points[0].point;
+          
+          if(points[0].series.name === 'Histogram') {
+            html += '<div style=\"padding: 5px;\">';
+            html += '<b>Range: $' + Math.round(point.xFrom) + ' - $' + Math.round(point.xTo) + '</b><br/>';
+            html += 'Density: <b>' + point.y.toFixed(4) + '</b><br/>';
+            html += 'Count: <b>' + point.count + ' transactions</b>';
+            html += '</div>';
+          } else if(points[0].series.name === 'Density Curve') {
+            // Density curve tooltip
+            html += '<div style=\"padding: 5px;\">';
+            html += '<b>Amount: $' + point.x.toFixed(2) + '</b><br/>';
+            html += 'Density: <b>' + point.y.toFixed(4) + '</b>';
+            html += '</div>';
+          }
+        }
+        return html;
+      }
+    ")
+  ) %>%
+  hc_legend(
+    enabled = FALSE)
+
+htmltools::HTML('
+      <style>
+        .content-tab-right > div {
+          transform: translateY(-65px);  /* Geser chart ke atas sebesar 50px (sesuaikan jika perlu, misalnya -30px atau -70px) */
+          box-shadow: none;  /* Hapus box-shadow untuk tampilan lebih clean */
+          transition: transform 0.3s ease;  /* Opsional: transisi halus */
+        }
+      </style>
+    </div>
+  </section>
+  <section id="probability-interpretation-tab" class="content-tab-section text-only">
+    <div class="content-tab-left">
+      <div>
+  <center><h1>Probability Distributions</h1></center
+<div style="probability-height: 1.3; text-align: justify;">
+<p style="text-align: justify; text-indent: 40px; margin-bottom: 15px;">
+    This visualization stacks the smoothed transaction value distributions of all three branches (A, B, C) into a single view, using semi-transparent filled areas. The shared vertical lines for the global <strong>Mean</strong> and <strong>Median</strong> across all data provide a crucial common reference point. This overlay method is chosen because it allows for direct, precise visual comparison of the <strong>central tendency, spread, and shape</strong> of each branch`s sales distribution simultaneously, highlighting which branch`s "peak" aligns with the overall average and which has heavier tails.</p>
+    <p style="text-align: justify; text-indent: 40px; margin-bottom: 15px;">The branch whose density curve peaks closest to the global mean line is the one whose most common transaction size aligns with the company`s overall average, suggesting it represents the "typical" store performance. Branches with density curves shifted to the left of the mean have more frequent low-value transactions, while those shifted to the right see more frequent high-value sales. The relative width and height of the peaks show which branch has more consistent sales (taller, narrower peak) versus more variable spending (shorter, wider spread). This directly informs resource allocation, identifying which branches might need strategies to increase average transaction size versus those that excel at it.</p>
+</div>
+    </div>
+  </section>
+</div>
+')
+```
+
+Confidence Interval  {data-orientation=rows}
+=======================================================================
+
+## Column {.tabset .tabset-fade data-height=520}
+-----------------------------------------------------------------------
+
+### Introduction {data-width=1200}
+
+<div style="font-family: Arial, sans-serif; line-height: 1.2; text-align: justify;"> 
+<p style="text-align: justify; text-indent: 40px; margin-bottom: 15px;">
+In the modern retail industry, the level of competition between supermarkets is increasing as consumers increase their choices. This condition demands that companies not only focus on increasing sales, but also on customer satisfaction as a key indicator of service success and consumer loyalty. Because satisfied customers tend to make repeat purchases, recommend to others and can create a positive image for the company.
+</p>
+</div>
+
+<div style="font-family: Arial, sans-serif; line-height: 1.2; text-align: justify;"> 
+<p style="text-align: justify; text-indent: 40px; margin-bottom: 15px;">
+Supermarkets as providers of daily necessities generally set minimum customer satisfaction standards as a benchmark for service quality. However, the standard needs to be evaluated periodically using empirical data to ensure that the perceived level of customer satisfaction actually meets or even exceeds the set targets. For example, supermarkets often implement membership programs with the aim of increasing customer loyalty. This program is expected to be able to provide a better shopping experience for customers than non-member customers.
+</p>
+</div>
+
+<div style="font-family: Arial, sans-serif; line-height: 1.2; text-align: justify;"> 
+<p style="text-align: justify; text-indent: 40px; margin-bottom: 15px;">
+Based on these conditions, it is important to find out whether there is a difference in the level of satisfaction between member and non-member customers. This study aims to analyze the level of customer satisfaction through several statistical approaches, namely confidence interval to estimate average customer satisfaction, statistical inference to test whether the level of satisfaction has exceeded the company's standards, and A nonparametric method to compare customer satisfaction between member and non-member customers without relying on the assumption of data normality.
+</p>
+</div>
+
+### Study Case {data-width=1200}
+
+<div style="font-family: Arial; text-align:center;font-size:120%;">
+**Confidence Interval**
+</div>
+
+<div style="font-family: Arial, sans-serif; line-height: 1.2; text-align: justify;"> 
+<p style="text-align: justify; text-indent: 40px; margin-bottom: 15px;">
+At this stage, the management wants to estimate the average value range of customer satisfaction levels in supermarkets whether they are at the company's satisfaction standard, which is 7 based on sample data to evaluate whether the average customer satisfaction has met or exceeded the company's minimum standards using a 95% confidence interval.
+</p>
+</div>
+
+<center><h2>**Formula**</h2></center>
+
+<div style="display: grid; grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(3, auto); gap: 10px; margin: 20px 0;">
+
+<div style="border: 1px solid #ddd; padding: 10px; border-radius: 3px; background: #f9f9f9;">
+<strong>Sample</strong>
+$$9.1, \ 9.6, \ 7.4, \ 8.4, \ 5.3, \ ..., \ 6.6$$
+</div>
+
+<div style="border: 1px solid #ddd; padding: 10px; border-radius: 3px; background: #f9f9f9;">
+<strong>Sample Size</strong>
+$$n=1000$$
+</div>
+
+<div style="border: 1px solid #ddd; padding: 10px; border-radius: 3px; background: #f9f9f9;">
+<strong>Sample Mean</strong>
+$$\begin{array}{rl}
+\bar{x} &= \frac{1}{n} \sum_{i=1}^{n} x_i \\[2mm]
+        &= \frac{1}{1000} (x_1 + x_2 + \cdots + x_{1000}) \\[1mm]
+        &= \frac{1}{1000} (9.1+9.6+7.4+8.4+5.3+...+6.6) \\[1mm]
+        &= 6.973
+\end{array}$$
+</div>
+
+<div style="border: 1px solid #ddd; padding: 10px; border-radius: 3px; background: #f9f9f9;">
+<strong>Sample Standard Deviation</strong>
+$$\begin{array}{rl}
+s & = \sqrt{\frac{\sum_{i=1}^{n} (x_i - \bar{x})^2}{n-1}} \\[2mm]
+  & = \sqrt{\frac{(9.1-6.973)^2 + (9.6-6.973)^2 + \dots + (6.6-6.973)^2}{1000-1}} \\[2mm]
+  & \approx 1.7190
+\end{array}$$
+</div>
+
+### Study Case
+
+<center><h2>**Formula**</h2></center>
+
+<div style="display: grid; grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(3, auto); gap: 10px; margin: 20px 0;">
+
+<div style="border: 1px solid #ddd; padding: 10px; border-radius: 3px; background: #f9f9f9;">
+<strong>Degrees of Freedom</strong>
+$$df= n-1=999$$
+</div>
+
+<div style="border: 1px solid #ddd; padding: 10px; border-radius: 3px; background: #f9f9f9;">
+<strong>Standard Error</strong>
+$$\begin{array}{rl}
+SE & = \frac{s}{\sqrt{n}} \\
+& = \frac{1.7190}{\sqrt{1000}} \\
+& \approx 0.0543
+\end{array}$$
+</div>
+</div>
+</div>
+
+<!-- Baris kedua untuk Margin of Error dan Confidence Interval -->
+<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 20px 0;">
+
+<div style="border: 1px solid #ddd; padding: 10px; border-radius: 3px; background: #f9f9f9;">
+<strong>Margin of Error</strong>
+$$\begin{array}{rl}
+ME & = t_{\alpha/2,\,df} \times SE \\
+\end{array}$$
+</div>
+
+<div style="border: 1px solid #ddd; padding: 10px; border-radius: 3px; background: #f9f9f9;">
+<strong>Confidence Interval</strong>
+$$\begin{array}{rl}
+CI_{95\%} & = \bar{x} \pm ME \\
+\end{array}$$
+</div>
+
+</div>
+
+### Summary Using code R
+
+```{r}
+
+# Load library
+library(knitr)
+
+# Baca data
+data <- read.csv("supermarket_sales.csv", stringsAsFactors = FALSE)
+
+# Ambil hanya kolom yang dibutuhkan dan pastikan numerik
+ci_data <- data.frame(
+  Rating = as.numeric(data$Rating)
+)
+
+# Hapus baris dengan NA
+ci_data <- na.omit(ci_data)
+
+# Pastikan jumlah observasi BENAR (pakai nrow)
+n <- nrow(ci_data)
+
+# Statistik sampel
+mean_rating <- mean(ci_data$Rating)
+sd_rating   <- sd(ci_data$Rating)
+
+# Parameter confidence interval
+alpha <- 0.05
+t_crit <- qt(1 - alpha / 2, df = n - 1)
+
+# Standard Error
+SE <- sd_rating / sqrt(n)
+
+# Confidence Interval
+lower_bound <- mean_rating - t_crit * SE
+upper_bound <- mean_rating + t_crit * SE
+
+# Tabel hasil (rapi & profesional)
+ci_table <- data.frame(
+  Statistik = c(
+    "Number of Samples (n)",
+    "Mean Rating",
+    "Standard Deviation",
+    "Standard Error",
+    "Lower Bound of 95% CI",
+    "Upper Bound of 95% CI"
+  ),
+  Nilai = c(
+    n,
+    round(mean_rating, 3),
+    round(sd_rating, 3),
+    round(SE, 4),
+    round(lower_bound, 3),
+    round(upper_bound, 3)
+  )
+)
+
+# Output tabel dengan knitr::kable
+kable(
+  ci_table,
+  align = c("l", "r"),
+  caption = "95% Confidence Interval of Average Supermarket Customer Rating"
+)
+
+```
+
+- **Statistical interpretations**
+
+<div style="font-family: Arial, sans-serif; line-height: 1.2; text-align: justify;"> 
+<p style="text-align: justify; text-indent: 40px; margin-bottom: 15px;">
+Statistically, a 95% confidence interval indicates that with a 95% confidence level, the average customer satisfaction of the population is estimated to be between 6.87 and 7.08. This means that if the sampling process is repeated many times, about 95% of the interval formed will contain the average value of the actual population's customer satisfaction.
+Because the company's standard satisfaction value (μ = 7) is within the confidence interval, there is no statistically strong enough evidence to state that average customer satisfaction is significantly higher or lower than that standard. In other words, average customer satisfaction does not differ significantly from the company's standard value at a 95% confidence level.
+</p>
+</div>
+
+- **Interpretation in busines**
+
+<div style="font-family: Arial, sans-serif; line-height: 1.2; text-align: justify;"> 
+<p style="text-align: justify; text-indent: 40px; margin-bottom: 15px;">
+From a business perspective, the results of this confidence interval show that the level of customer satisfaction is right around the company's set targets. However, because the lower bound of the trust interval is below the standard value (6.87 < 7), there is a risk that customer satisfaction has not actually been fully consistent with the company's targets.
+</p>
+</div>
+
+
+Statistical Inference  {data-orientation=rows}
+=======================================================================
+
+## Column {.tabset .tabset-fade data-height=520}
+-----------------------------------------------------------------------
+
+### Case {data-width=1200}
+
+<div style="font-family: Arial, sans-serif; line-height: 1.2; text-align: justify;"> 
+<p style="text-align: justify; text-indent: 40px; margin-bottom: 15px;">
+Once the company knows the average range of customer satisfaction statistically, at this stage the company needs to formally test whether the average customer satisfaction level in supermarkets is significantly higher than the minimum standard of company satisfaction.  The company also wanted to determine whether the observed differences were statistically significant or just a coincidence of the sample.
+</p>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(2, auto); gap: 10px; margin: 20px 0;">
+
+<div style="border: 1px solid #ddd; padding: 10px; border-radius: 3px; background: #f9f9f9; grid-column: span 2;">
+<strong>Null Hypothesis (H₀)</strong><br>
+$$\mu = 7$$
+<small style="color: #666;">Average satisfaction equals company standard</small>
+</div>
+
+<div style="border: 1px solid #ddd; padding: 10px; border-radius: 3px; background: #f9f9f9; grid-column: span 2;">
+<strong>Alternative Hypothesis (H₁)</strong><br>
+$$\mu > 7$$
+<small style="color: #666;">Average satisfaction exceeds company standard</small>
+</div>
+
+<div style="border: 1px solid #ddd; padding: 8px; border-radius: 3px; background: #f9f9f9;">
+<strong>Significance Level</strong><br>
+<div style="font-size: 18px; font-weight: bold; color: #333;">$$\alpha = 0.05$$</div>
+</div>
+
+<div style="border: 1px solid #ddd; padding: 8px; border-radius: 3px; background: #f9f9f9;">
+<strong>Sample Mean</strong><br>
+<div style="font-size: 16px; color: #333;">
+$$\bar{x} = 6.973$$
+</div>
+</div>
+
+<div style="border: 1px solid #ddd; padding: 8px; border-radius: 3px; background: #f9f9f9;">
+<strong>Sample SD</strong><br>
+<div style="font-size: 16px; color: #333;">
+$$s \approx 1.7190$$
+</div>
+</div>
+
+<div style="border: 1px solid #ddd; padding: 8px; border-radius: 3px; background: #f9f9f9;">
+<strong>Standard Error</strong><br>
+<div style="font-size: 16px; color: #333;">
+$$SE \approx 0.0543$$
+</div>
+</div>
+
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0;">
+<div style="border: 1px solid #ddd; padding: 10px; border-radius: 3px; background: #f1f8e9;">
+<strong>T-statistic Calculation</strong><br>
+<div style="font-size: 14px;">
+$$\begin{aligned}
+t &= \frac{\bar{x} - \mu_0}{SE} \\
+  &= \frac{6.973 - 7}{0.0543}
+  &= \frac{-0.027}{0.0543}
+  &\approx -0.502
+\end{aligned}$$
+</div>
+</div>
+
+<div style="border: 1px solid #ddd; padding: 10px; border-radius: 3px; background: #fff3e0;">
+<strong>Interpretation</strong><br>
+<div style="font-size: 14px; color: #555;">
+Since $t = -0.502$ (negative value), the sample mean is <strong>below</strong> the hypothesized value of 7.
+</div>
+</div>
+</div>  
+
+### Summary
+
+```{r}
+
+# Load library
+library(knitr)
+
+# Baca data
+data <- read.csv("supermarket_sales.csv", stringsAsFactors = FALSE)
+
+# Ambil dan bersihkan data Rating
+rating_data <- data.frame(
+  Rating = as.numeric(data$Rating)
+)
+rating_data <- na.omit(rating_data)
+
+# One-sample t-test
+t_test_result <- t.test(
+  rating_data$Rating,
+  mu = 7,
+  alternative = "greater",
+  conf.level = 0.95
+)
+
+# Membuat tabel hasil uji
+t_test_table <- data.frame(
+  Komponen = c(
+    "Null Hypothesis (H₀)",
+    "Alternative Hypothesis (H₁)",
+    "t-value",
+    "Degrees of Freedom (df)",
+    "p-value",
+    "Decision"
+    ),
+  Hasil = c(
+    "μ = 7",
+    "μ > 7",
+    round(t_test_result$statistic, 3),
+    t_test_result$parameter,
+    round(t_test_result$p.value, 4),
+    ifelse(t_test_result$p.value < 0.05,
+          "Reject H₀",
+          "Failed to Reject H₀")
+  )
+)
+
+# Tampilkan tabel
+kable(
+  t_test_table,
+  align = c("l", "l"),
+  caption = "One-Sample t-Test Results of Customer Satisfaction Level"
+)
+
+
+```
+
+**Interpretation**
+<div style="border: 1px solid #ddd; padding: 8px; border-radius: 3px; background: #f9f9f9;">
+<div style="font-family: Arial, sans-serif; line-height: 1.2; text-align: justify;"> 
+<p style="text-align: justify; text-indent: 40px; margin-bottom: 15px;">
+Based on the results of the one-sample t-test, a p-value greater than the significance level of 0.05 was obtained, which was 0.6922. Therefore, the null hypothesis cannot be rejected.This means that there is not enough statistical evidence to state that the average customer satisfaction rate is significantly higher than the minimum standard of company satisfaction of 7.This result is consistent with the previous confidence interval, where the company's standard value was still within the confidence interval.
+</p>
+</div>
+</div>
+
+Nonparametric Methods  {data-orientation=rows}
+=======================================================================
+
+## Column {.tabset .tabset-fade data-height=520}
+-----------------------------------------------------------------------
+
+### Case {data-width=1200}
+
+
+<div style="font-family: Arial, sans-serif; line-height: 1.2; text-align: justify;"> 
+<p style="text-align: justify; text-indent: 40px; margin-bottom: 15px;">
+Next, the company wanted to test whether there was a difference in customer satisfaction levels between member and non-member customers without relying on normal distribution assumptions. The method used is the Mann–Whitney U Test.
+</p>
+</div>
+<div style="display: flex; gap: 15px; margin: 15px 0;">
+<div style="flex: 1; border: 1px solid #ddd; padding: 12px; border-radius: 3px; background: #ffebee; text-align: center;">
+<strong style="color: #d32f2f;">Null Hypothesis (H₀)</strong><br>
+<div style="margin-top: 8px; font-size: 14px;">
+$$H_0: \text{Member Rating Distribution} = \text{Non-Member Rating Distribution}$$
+</div>
+<small style="color: #666;">No difference in rating distributions</small>
+</div>
+
+<div style="flex: 1; border: 1px solid #ddd; padding: 12px; border-radius: 3px; background: #e8f5e8; text-align: center;">
+<strong style="color: #388e3c;">Alternative Hypothesis (H₁)</strong><br>
+<div style="margin-top: 8px; font-size: 14px;">
+$$H_1: \text{Distribution Ratings differ between Members and Non-Members}$$
+</div>
+<small style="color: #666;">Rating distributions are different</small>
+</div>
+</div>
+
+- **Step 1: Combine and Rank Data**
+
+```{r}
+library(dplyr)
+library(DT)
+library(htmltools)
+
+# Load data
+data <- read.csv("supermarket_sales.csv", stringsAsFactors = FALSE)
+
+# Prepare data
+rank_data <- data %>%
+  select(Customer.type, Rating) %>%
+  mutate(Rating = as.numeric(Rating)) %>%
+  na.omit() %>%
+  arrange(Rating) %>%
+  mutate(Rank = rank(Rating, ties.method = "average"))
+
+# Custom CSS to reduce spacing
+custom_css <- tags$style(HTML("
+  div.dataTables_wrapper {
+    margin-bottom: 0px;
+  }
+  div.dataTables_info {
+    padding-top: 4px !important;
+  }
+  div.dataTables_paginate {
+    padding-top: 4px !important;
+  }
+  table.dataTable {
+    margin-bottom: 4px !important;
+  }
+"))
+
+# Datatable output
+browsable(
+  tagList(
+    custom_css,
+    datatable(
+      rank_data,
+      options = list(
+        pageLength = 2,
+        scrollY = "300px",
+        scrollCollapse = TRUE,
+        dom = 't<"dt-bottom"ip>'  # control layout
+      ),
+      rownames = FALSE,
+      caption = "Combined and Ranked Rating Data (Member vs Non-Member)"
+    )
+  )
+)
+
+```
+
+### 2
+
+- **Step 2: Rank Sum and Compute the U Statistic** 
+
+The formula for U-statistic is:
+$$U_1 = n_1 n_2 + \frac{n_1 (n_1 + 1)}{2} - R_1$$
+$$U_2 = n_1 n_2 + \frac{n_2 (n_2 + 1)}{2} - R_2$$
+
+
+```{r}
+library(dplyr)
+library(knitr)
+
+# Load data
+data <- read.csv("supermarket_sales.csv", stringsAsFactors = FALSE)
+
+# Combine and rank
+rank_data <- data %>%
+  select(Customer.type, Rating) %>%
+  mutate(Rating = as.numeric(Rating)) %>%
+  na.omit() %>%
+  arrange(Rating) %>%
+  mutate(Rank = rank(Rating, ties.method = "average"))
+
+# Rank sum per kelompok
+rank_sum <- rank_data %>%
+  group_by(Customer.type) %>%
+  summarise(
+    n = n(),
+    Rank_Sum = sum(Rank)
+  )
+
+# Pisahkan nilai
+n1 <- rank_sum$n[1]
+n2 <- rank_sum$n[2]
+R1 <- rank_sum$Rank_Sum[1]
+R2 <- rank_sum$Rank_Sum[2]
+
+# Hitung U statistic
+U1 <- R1 - (n1 * (n1 + 1)) / 2
+U2 <- R2 - (n2 * (n2 + 1)) / 2
+U  <- min(U1, U2)
+
+# Tabel hasil U statistic
+u_table <- data.frame(
+  Kelompok = c(rank_sum$Customer.type, "Minimum"),
+  n = c(n1, n2, NA),
+  Rank_Sum = c(R1, R2, NA),
+  U_Statistic = c(U1, U2, U)
+)
+
+# Tampilkan tabel
+kable(
+  u_table,
+  digits = 2,
+  caption = "Perhitungan Mann–Whitney U Statistic"
+)
+
+```
+
+
+### 3
+
+- **Step 3: Test Statistic**
+
+```{r}
+library(dplyr)
+library(knitr)
+
+# Load data
+data <- read.csv("supermarket_sales.csv", stringsAsFactors = FALSE)
+
+# Combine & rank
+rank_data <- data %>%
+  select(Customer.type, Rating) %>%
+  mutate(Rating = as.numeric(Rating)) %>%
+  na.omit() %>%
+  arrange(Rating) %>%
+  mutate(Rank = rank(Rating, ties.method = "average"))
+
+# Rank sum
+rank_sum <- rank_data %>%
+  group_by(Customer.type) %>%
+  summarise(
+    n = n(),
+    Rank_Sum = sum(Rank)
+  )
+
+# Extract values
+n1 <- rank_sum$n[1]
+n2 <- rank_sum$n[2]
+R1 <- rank_sum$Rank_Sum[1]
+R2 <- rank_sum$Rank_Sum[2]
+
+# Compute U statistics
+U1 <- R1 - (n1 * (n1 + 1)) / 2
+U2 <- R2 - (n2 * (n2 + 1)) / 2
+U  <- min(U1, U2)
+
+# Mean and SD of U
+mu_U <- (n1 * n2) / 2
+sd_U <- sqrt((n1 * n2 * (n1 + n2 + 1)) / 12)
+
+# Z statistic
+Z <- (U - mu_U) / sd_U
+
+# Result table
+z_table <- data.frame(
+  Statistik = c("U minimum", "Mean U", "SD U", "Z Statistic"),
+  Nilai = c(U, mu_U, sd_U, Z)
+)
+
+# Display table
+kable(
+  z_table,
+  digits = 3,
+  caption = "Perhitungan Z-Statistic (Normal Approximation Mann–Whitney)"
+)
+
+
+```
+
+### summary
+
+```{r}
+library(dplyr)
+library(knitr)
+
+# Load data
+data <- read.csv("supermarket_sales.csv", stringsAsFactors = FALSE)
+
+# Combine & rank
+rank_data <- data %>%
+  select(Customer.type, Rating) %>%
+  mutate(Rating = as.numeric(Rating)) %>%
+  na.omit() %>%
+  arrange(Rating) %>%
+  mutate(Rank = rank(Rating, ties.method = "average"))
+
+# Rank sum
+rank_sum <- rank_data %>%
+  group_by(Customer.type) %>%
+  summarise(
+    n = n(),
+    Rank_Sum = sum(Rank)
+  )
+
+# Extract values
+n1 <- rank_sum$n[1]
+n2 <- rank_sum$n[2]
+R1 <- rank_sum$Rank_Sum[1]
+R2 <- rank_sum$Rank_Sum[2]
+
+# Compute U
+U1 <- R1 - (n1 * (n1 + 1)) / 2
+U2 <- R2 - (n2 * (n2 + 1)) / 2
+U  <- min(U1, U2)
+
+# Mean & SD of U
+mu_U <- (n1 * n2) / 2
+sd_U <- sqrt((n1 * n2 * (n1 + n2 + 1)) / 12)
+
+# Z statistic
+Z <- (U - mu_U) / sd_U
+
+# p-value (two-sided)
+p_value <- 2 * (1 - pnorm(abs(Z)))
+
+# Final summary table
+final_table <- data.frame(
+  Komponen = c("U minimum", "Z Statistic", "p-value", "Alpha (α)"),
+  Nilai = c(U, Z, p_value, 0.05)
+)
+
+# Display table
+kable(
+  final_table,
+  digits = 4,
+  caption = "Ringkasan Uji Mann–Whitney: Statistik U, Z, dan p-value"
+)
+
+
+```
+
+**Interpretation :**<br>
+Since the p-value > α(0.05), we have failed to reject H0. This means that there is not enough evidence to state that the distribution of ratings between Member and Non-Member customers differs significantly. This means that according to the Mann–Whitney U Test, both groups are likely to come from the same population in terms of location/distribution of Ratings.Thus, statistically membership programs have not been proven to affect customer satisfaction levels.
+
+**Business Interpretation :**<br>
+From a business point of view, the results of this test show that the level of customer satisfaction according to the rating does not differ statistically between Member and Non-Member customers. In other words; The member program may not result in different satisfaction increases, according to customer data and companies should evaluate other factors that differentiate the Member vs Non-Member experience because they both appear to have similar satisfaction distributions.
+
+
+Conclusion  {data-orientation=rows}
+=======================================================================
+
+<div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 2px; border-radius: 8px; margin: 25px 0;">
+<div style="background: white; padding: 25px; border-radius: 6px;">
+
+<div style="text-align: center; margin-bottom: 20px;">
+<div style="display: inline-block; padding: 10px 20px; background: #667eea; color: white; border-radius: 30px; font-weight: bold; font-size: 16px;">
+FINAL CONCLUSION
+</div>
+</div>
+
+<p style="text-align: justify; line-height: 1.6; color: #444; margin-bottom: 25px; padding: 0 10px;">
+This study evaluates supermarket membership programs' effect on customer satisfaction (measured by Ratings) using three statistical approaches to compare Member vs. Non-Member satisfaction.
+</p>
+
+<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 25px;">
+<div style="text-align: center; padding: 15px; border-radius: 5px; background: #f0f7ff;">
+<div style="width: 40px; height: 40px; background: #3498db; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; font-weight: bold;">CI</div>
+<strong style="color: #2980b9; display: block; margin-bottom: 8px;">Confidence Interval</strong>
+<p style="margin: 0; font-size: 12px; color: #555;">
+No significant difference found in average ratings
+</p>
+</div>
+
+<div style="text-align: center; padding: 15px; border-radius: 5px; background: #fff5f5;">
+<div style="width: 40px; height: 40px; background: #e74c3c; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; font-weight: bold;">HT</div>
+<strong style="color: #c0392b; display: block; margin-bottom: 8px;">Hypothesis Test</strong>
+<p style="margin: 0; font-size: 12px; color: #555;">
+Fail to reject H<sub>0</sub> - no difference
+</p>
+</div>
+
+<div style="text-align: center; padding: 15px; border-radius: 5px; background: #f0fff4;">
+<div style="width: 40px; height: 40px; background: #27ae60; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; font-weight: bold;">NP</div>
+<strong style="color: #229954; display: block; margin-bottom: 8px;">Nonparametric</strong>
+<p style="margin: 0; font-size: 12px; color: #555;">
+Consistent results without assumptions
+</p>
+</div>
+</div>
+
+<div style="background: #fff8e1; padding: 20px; border-radius: 5px; border-left: 5px solid #f39c12;">
+<strong style="color: #d35400; font-size: 16px; display: block; margin-bottom: 10px;">CONCLUSION & RECOMMENDATION</strong>
+<p style="margin: 0; font-size: 14px; line-height: 1.6; color: #555;">
+All three statistical methods consistently show <strong>no significant difference</strong> in customer satisfaction between members and non-members. The membership program has <strong>not proven effective</strong> in enhancing satisfaction. The supermarket should <strong>redirect focus</strong> to improving service quality, transaction speed, and overall customer experience, as these factors likely have greater impact on satisfaction than membership status alone.
+</p>
+</div>
+
+</div>
+</div>
